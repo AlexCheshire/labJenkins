@@ -38,5 +38,21 @@ pipeline {
 				}
 			}
 		}
-	}
+		stage('Image building') {
+                    		steps {
+                        		script {
+                            		dockerImage = docker.build registry
+                        		}
+                    		}
+                		}
+         		stage('Delivery') {
+                    		steps {
+                        		script {
+                            		docker.withRegistry( '', registryCredential ) {
+                                		dockerImage.push('latest')
+                            		}
+                        	}
+                    	}
+                }
+    	}
 }
